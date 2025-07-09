@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -71,6 +72,54 @@ public class EmpleadoRepositoryTests {
         List<Empleado> listaDeEmpleados = empleadoRepository.findAll();
         assertThat(listaDeEmpleados).isNotNull();
         assertThat(listaDeEmpleados.size()).isEqualTo(2);
+    }
+
+    @DisplayName("Test Para Obtener Empleado Por ID")
+    @Test
+    void testObtenerEmpleadoPorId(){
+
+        empleadoRepository.save(empleado);
+
+        //when
+        Empleado empleadoBd = empleadoRepository.findById(empleado.getId()).get();
+
+        //then
+        assertThat(empleadoBd).isNotNull();
+
+    }
+
+    @DisplayName("Test actualizando Empleado")
+    @Test
+    void testActualizarEmpleado(){
+        empleadoRepository.save(empleado);
+
+        //when
+        Empleado empleadoGuardado = empleadoRepository.findById(empleado.getId()).get();
+        empleadoGuardado.setNombre("agus");
+        empleadoGuardado.setApellido("gonza");
+        empleadoGuardado.setEmail("agus@gmail.com");
+
+        Empleado empleadoActualizado = empleadoRepository.save(empleadoGuardado);
+
+        //then
+        assertThat(empleadoActualizado.getNombre()).isEqualTo("agus");
+        assertThat(empleadoActualizado.getApellido()).isEqualTo("gonza");
+        assertThat(empleadoActualizado.getEmail()).isEqualTo("agus@gmail.com");
+
+
+    }
+    @DisplayName("Test para eliminar un empleado")
+    @Test
+    void testEliminarEmpleado(){
+        empleadoRepository.save(empleado);
+
+        //when
+        empleadoRepository.deleteById(empleado.getId());
+        Optional<Empleado > empleadoEliminado = empleadoRepository.findById(empleado.getId());
+
+        //then
+        assertThat(empleadoEliminado).isEmpty();
+
     }
 
 }
