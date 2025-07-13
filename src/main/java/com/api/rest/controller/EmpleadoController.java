@@ -38,7 +38,7 @@ public class EmpleadoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Empleado> actualizarEmpleado(@PathVariable("/id") long empleadoId, @RequestBody Empleado empleado){
+    public ResponseEntity<Empleado> actualizarEmpleado(@PathVariable("id") long empleadoId, @RequestBody Empleado empleado){
 
          return empleadoService.getEmpleadoById(empleadoId)
                  .map(empleadoGuardado ->{
